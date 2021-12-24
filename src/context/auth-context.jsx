@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import {
   showSuccessToastMessage,
   showErrorToastMessage,
-} from "../utilities/utility.js";
+} from "../utils/utility.js";
 
 import {
   getAuth,

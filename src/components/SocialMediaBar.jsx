@@ -5,7 +5,7 @@ import {
   GITHUB_PROFILE_URL,
   TWITTER_PROFILE_URL,
   LINKEDIN_PROFILE_URL,
-} from "../utilities/constants.js";
+} from "../utils/constants.js";
 
 export const SocialMediaBar = () => {
   return (
