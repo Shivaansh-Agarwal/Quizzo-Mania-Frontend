@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { QuizInstructions } from "./QuizInstructions";
-import { QuizQuestionCard } from "./QuizQuestionCard";
-import { questionsList } from "../data/Questions";
+import { QuizInstructions } from "./QuizInstructions.jsx";
+import { QuizQuestionCard } from "./QuizQuestionCard.jsx";
+import { questionsList } from "../../../data/Questions.js";
 
 export function Quiz() {
   const navigate = useNavigate();

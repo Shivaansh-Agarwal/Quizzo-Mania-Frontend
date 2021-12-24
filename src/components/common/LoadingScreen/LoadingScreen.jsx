@@ -1,7 +1,7 @@
 import React from "react";
-import imgSpinner from "../images/spinner.gif";
+import imgSpinner from "../../../assets/spinner.gif";
 
-export default function LoadingScreen({ showLoadingScreen = true }) {
+export const LoadingScreen = ({ showLoadingScreen = true }) => {
   return (
     <>
       {showLoadingScreen && (
@@ -12,4 +12,4 @@ export default function LoadingScreen({ showLoadingScreen = true }) {
       {!showLoadingScreen && null}
     </>
   );
-}
+};

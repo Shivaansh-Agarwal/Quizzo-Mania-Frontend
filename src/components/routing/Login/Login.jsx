@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/auth-context";
+import { useAuth } from "../../../contexts/auth-context.jsx";
 
-export default function Login() {
+export const Login = () => {
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
@@ -78,7 +78,7 @@ export default function Login() {
       </div>
     </>
   );
-}
+};
 
 function Email({ handleInputChange, userDetails }) {
   return (

@@ -1,6 +1,6 @@
-import { SocialMediaBar } from "./SocialMediaBar.jsx";
+import { SocialMediaBar } from "../../common";
 
-export function Footer({ minHeight, maxHeight }) {
+export const Footer = ({ minHeight, maxHeight }) => {
   return (
     <footer
       className="flex flex-col justify-center items-center bg-sky-900"
@@ -12,4 +12,4 @@ export function Footer({ minHeight, maxHeight }) {
       <SocialMediaBar />
     </footer>
   );
-}
+};

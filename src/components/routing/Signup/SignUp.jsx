@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/auth-context";
+import { useAuth } from "../../../contexts/auth-context.jsx";
 
-export default function SignUp() {
+export const SignUp = () => {
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -69,7 +69,7 @@ export default function SignUp() {
       </div>
     </>
   );
-}
+};
 
 function Name({ handleInputChange, userDetails }) {
   return (

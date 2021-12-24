@@ -1,11 +1,11 @@
-import iconGithub from "../images/icon-github.svg";
-import iconLinkedin from "../images/icon-linkedin.svg";
-import iconTwitter from "../images/icon-twitter.svg";
+import iconGithub from "../../../assets/icon-github.svg";
+import iconLinkedin from "../../../assets/icon-linkedin.svg";
+import iconTwitter from "../../../assets/icon-twitter.svg";
 import {
   GITHUB_PROFILE_URL,
   TWITTER_PROFILE_URL,
   LINKEDIN_PROFILE_URL,
-} from "../utils/constants.js";
+} from "../../../utils/constants.js";
 
 export const SocialMediaBar = () => {
   return (

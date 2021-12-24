@@ -1,11 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import SignUp from "./SignUp";
-import Login from "./Login";
-import ProtectedRoute from "./ProtectedRoute";
-import { QuizCardsContainer } from "./QuizCardsContainer.jsx";
-import { Quiz } from "./Quiz.jsx";
+import {
+  Login,
+  SignUp,
+  QuizListing,
+  Quiz,
+  ProtectedRoute,
+} from "../../routing";
 
-export function Main({ minHeight, maxHeight }) {
+export const Main = ({ minHeight, maxHeight }) => {
   return (
     <main
       className="flex justify-center items-center overflow-auto"
@@ -16,7 +18,7 @@ export function Main({ minHeight, maxHeight }) {
           path="/"
           element={
             <ProtectedRoute>
-              <QuizCardsContainer />
+              <QuizListing />
             </ProtectedRoute>
           }
         />
@@ -34,4 +36,4 @@ export function Main({ minHeight, maxHeight }) {
       </Routes>
     </main>
   );
-}
+};

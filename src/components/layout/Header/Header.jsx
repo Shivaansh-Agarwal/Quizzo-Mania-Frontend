@@ -1,6 +1,6 @@
-import { useAuth } from "../context/auth-context";
+import { useAuth } from "../../../contexts/auth-context.jsx";
 
-export function Header({ minHeight, maxHeight }) {
+export const Header = ({ minHeight, maxHeight }) => {
   const { currentUser, logout } = useAuth();
   return (
     <header
@@ -23,4 +23,4 @@ export function Header({ minHeight, maxHeight }) {
       )}
     </header>
   );
-}
+};
