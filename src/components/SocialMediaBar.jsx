@@ -9,7 +9,7 @@ import {
 
 export const SocialMediaBar = () => {
   return (
-    <div className="flex flex-row justify-evenly w-32 sm:w-40 pt-2 ">
+    <div className="flex flex-row justify-evenly w-32 sm:w-40 pt-0.5 sm:pt-2">
       <ImageLink
         profileURL={GITHUB_PROFILE_URL}
         imgSrc={iconGithub}
@@ -32,7 +32,7 @@ export const SocialMediaBar = () => {
 const ImageLink = ({ profileURL, imgSrc, altText }) => {
   return (
     <a href={profileURL} target="_blank" rel="noreferrer">
-      <img src={imgSrc} alt={altText} className="w-6 h-6 sm:w-8 sm:h-8" />
+      <img src={imgSrc} alt={altText} className="w-6 h-6 sm:w-7 sm:h-7" />
     </a>
   );
 };
