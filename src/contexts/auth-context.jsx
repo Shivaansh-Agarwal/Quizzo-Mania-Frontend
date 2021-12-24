@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   showSuccessToastMessage,
   showErrorToastMessage,
-} from "../utils/utility.js";
+} from "@utils/utility.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -11,8 +11,8 @@ import {
   updateProfile,
   signOut,
   onAuthStateChanged,
-} from "../utils/firebase.js";
-import { LoadingScreen } from "../components/common";
+} from "@utils/firebase.js";
+import { LoadingScreen } from "@components/common";
 
 const AuthContext = createContext(null);
 

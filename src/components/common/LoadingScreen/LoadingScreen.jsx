@@ -1,5 +1,5 @@
 import React from "react";
-import imgSpinner from "../../../assets/spinner.gif";
+import imgSpinner from "@assets/spinner.gif";
 
 export const LoadingScreen = ({ showLoadingScreen = true }) => {
   return (

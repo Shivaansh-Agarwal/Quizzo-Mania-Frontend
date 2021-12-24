@@ -1,4 +1,4 @@
-import { useAuth } from "../../../contexts/auth-context.jsx";
+import { useAuth } from "@contexts/auth-context.jsx";
 
 export const Header = ({ minHeight, maxHeight }) => {
   const { currentUser, logout } = useAuth();

@@ -1,4 +1,4 @@
-import { SocialMediaBar } from "../../common";
+import { SocialMediaBar } from "@components/common";
 
 export const Footer = ({ minHeight, maxHeight }) => {
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../../contexts/auth-context.jsx";
+import { useAuth } from "@contexts/auth-context.jsx";
 
 export const Login = () => {
   const [userDetails, setUserDetails] = useState({

@@ -5,7 +5,7 @@ import {
   QuizListing,
   Quiz,
   ProtectedRoute,
-} from "../../routing";
+} from "@components/routing";
 
 export const Main = ({ minHeight, maxHeight }) => {
   return (
