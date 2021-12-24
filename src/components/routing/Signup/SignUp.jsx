@@ -39,7 +39,7 @@ export const SignUp = () => {
     }
   }
   return (
-    <>
+    <div className="flex flex-col justify-center items-center">
       <form
         onSubmit={handleSignUp}
         className="flex flex-col items-center border p-8"
@@ -67,7 +67,7 @@ export const SignUp = () => {
           Login
         </Link>
       </div>
-    </>
+    </div>
   );
 };
 
