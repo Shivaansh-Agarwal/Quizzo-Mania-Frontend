@@ -1,13 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useAuth } from "@contexts/auth-context.jsx";
 import { QuizCard } from "./QuizCard";
-import { quizData } from "../../../data/Quiz.js";
+import { LoadingScreen } from "@components/common";
 
 export function QuizListing() {
+  const [quizList, setQuizList] = useState([]);
+  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  const { currentUser, authorizationToken } = useAuth();
+  useEffect(() => {
+    getQuizList({ setShowLoadingScreen, authorizationToken, setQuizList });
+  }, [authorizationToken]);
+  const userQuizData = currentUser.quizAttempted; // To be used later in QuizCard component to display some overlay.
   return (
     <div className="flex flex-row flex-wrap justify-center items-center gap-4 overflow-auto h-full p-4 bg-slate-100">
-      {quizData.map((quiz) => {
-        return <QuizCard key={quiz.id} {...quiz} />;
-      })}
+      <LoadingScreen showLoadingScreen={showLoadingScreen} />
+      {quizList.length === 0
+        ? "No Quiz is available at the moment!"
+        : quizList.map((quiz) => {
+            return <QuizCard key={quiz._id} {...quiz} />;
+          })}
     </div>
   );
+}
+
+async function getQuizList({
+  setShowLoadingScreen,
+  authorizationToken,
+  setQuizList,
+}) {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${authorizationToken}`,
+    },
+  };
+  try {
+    setShowLoadingScreen(true);
+    const response = await axios.get(
+      "https://QuizAppBackend.shivaansh98.repl.co/api/v1/quizzes",
+      config
+    );
+    setQuizList(response.data.data);
+  } catch (e) {
+    console.error(e.response);
+  } finally {
+    setShowLoadingScreen(false);
+  }
 }
