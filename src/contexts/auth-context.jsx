@@ -1,17 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   showSuccessToastMessage,
   showErrorToastMessage,
 } from "@utils/utility.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-  signOut,
-  onAuthStateChanged,
-} from "@utils/firebase.js";
 import { LoadingScreen } from "@components/common";
 
 const AuthContext = createContext(null);
@@ -23,57 +16,63 @@ function isUserLoggedIn() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(isUserLoggedIn);
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-    });
-    return unsubscribe;
-  });
 
   const navigate = useNavigate();
 
-  async function signup({ email, password, name, setUserDetails }) {
+  async function signup({ email, password, username, clearSignUpFields }) {
     try {
       setShowLoadingScreen(true);
-      const auth = getAuth();
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
+      const response = await axios.post(
+        "https://quizappbackend.shivaansh98.repl.co/signup",
+        {
+          username,
+          email,
+          password,
+        }
       );
-      await updateProfile(user, {
-        displayName: name,
-      });
-      setUserDetails({
-        name: "",
-        email: "",
-        password: "",
-      });
-      showSuccessToastMessage("SignUp Successful!");
+      console.log("Signup Successful!!");
+      clearSignUpFields();
+      showSuccessToastMessage(response.data.message);
       navigate("/login");
-    } catch (error) {
-      const { code: errorCode, message: errorMessage } = error;
-      showErrorToastMessage("Signup Failed", errorCode, errorMessage);
+    } catch (e) {
+      console.error("Signup Failed", e.response.data);
+      const { message: errMsg } = e.response.data;
+      showErrorToastMessage(errMsg);
     } finally {
       setShowLoadingScreen(false);
     }
   }
 
-  async function login({ email, password, setUserDetails }) {
+  async function login({ email, password, clearLoginFields }) {
     try {
       setShowLoadingScreen(true);
-      const auth = getAuth();
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
-      setUserDetails({ email: "", password: "" });
-      const { displayName: username } = user;
-      showSuccessToastMessage(`Welcome ${username}`);
-      localStorage.setItem("user", JSON.stringify(user));
+      const response = await axios.post(
+        "https://quizappbackend.shivaansh98.repl.co/login",
+        { email, password }
+      );
+      console.log("Login Successful!");
+      const {
+        email: userEmail,
+        username,
+        quizAttempted,
+        isDarkModeSelected,
+        authorizationToken,
+      } = response.data.data;
+      const userDetails = {
+        email: userEmail,
+        username,
+        quizAttempted,
+        isDarkModeSelected,
+      };
+      setCurrentUser(userDetails);
+      localStorage.setItem("user", JSON.stringify(userDetails));
+      localStorage.setItem("authorizationToken", authorizationToken);
+      clearLoginFields();
       navigate("/");
-    } catch (error) {
-      const { code: errorCode, message: errorMessage } = error;
-      showErrorToastMessage("Login Failed", errorCode, errorMessage);
+    } catch (e) {
+      console.error("Signup Failed", e.response.data);
+      const { message: errMsg } = e.response.data;
+      showErrorToastMessage(errMsg);
     } finally {
       setShowLoadingScreen(false);
     }
@@ -81,16 +80,16 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     try {
-      const auth = getAuth();
-      await signOut(auth);
+      setCurrentUser(null);
+      localStorage.setItem("authorizationToken", null);
       localStorage.setItem("user", null);
     } catch (error) {
-      showErrorToastMessage("Logout Failed", error);
+      showErrorToastMessage("Logout Failed");
     }
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, signup, login, logout }}>
+    <AuthContext.Provider value={{ signup, login, logout, currentUser }}>
       <LoadingScreen showLoadingScreen={showLoadingScreen} />
       {children}
     </AuthContext.Provider>

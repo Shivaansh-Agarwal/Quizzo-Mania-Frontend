@@ -12,7 +12,7 @@ export const Header = ({ minHeight, maxHeight }) => {
       </div>
       {currentUser && (
         <div className="flex flex-col justify-center items-center">
-          <h1>Hi! {currentUser.displayName}</h1>
+          <h1>Hi! {currentUser.username}</h1>
           <button
             className="text-blue-700 hover:underline pl-8 pr-8 pt-2 pb-2 w-fit cursor-pointer"
             onClick={logout}

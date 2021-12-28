@@ -11,8 +11,14 @@ export const Login = () => {
 
   function handleLogin(e) {
     e.preventDefault();
-    const { email, password } = userDetails;
-    login({ email, password, setUserDetails });
+    login({
+      ...userDetails,
+      clearLoginFields: clearLoginFields.bind(this, setUserDetails),
+    });
+  }
+
+  function clearLoginFields(setUserDetails) {
+    setUserDetails({ email: "", password: "" });
   }
 
   function handleInputChange(event) {
@@ -33,6 +39,7 @@ export const Login = () => {
         console.error("The Input Event is not valid");
     }
   }
+
   return (
     <div className="flex flex-col justify-center items-center">
       <form

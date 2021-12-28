@@ -4,7 +4,7 @@ import { useAuth } from "@contexts/auth-context.jsx";
 
 export const SignUp = () => {
   const [userDetails, setUserDetails] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -12,16 +12,25 @@ export const SignUp = () => {
 
   function handleSignUp(e) {
     e.preventDefault();
-    const { name, email, password } = userDetails;
-    signup({ email, password, name, setUserDetails });
+    signup({
+      ...userDetails,
+      clearSignUpFields: clearSignUpFields.bind(this, setUserDetails),
+    });
+  }
+  function clearSignUpFields(setUserDetails) {
+    setUserDetails({
+      username: "",
+      email: "",
+      password: "",
+    });
   }
   function handleInputChange(event) {
     const elementId = event.target.id;
     const value = event.target.value;
     switch (elementId) {
-      case "name":
+      case "username":
         setUserDetails((userDetails) => {
-          return { ...userDetails, name: value };
+          return { ...userDetails, username: value };
         });
         break;
       case "email":
@@ -38,6 +47,7 @@ export const SignUp = () => {
         console.error("The Input Event is not valid");
     }
   }
+
   return (
     <div className="flex flex-col justify-center items-center">
       <form
@@ -74,10 +84,10 @@ export const SignUp = () => {
 function Name({ handleInputChange, userDetails }) {
   return (
     <>
-      <label htmlFor="name">Name</label>
+      <label htmlFor="username">Name</label>
       <input
         type="text"
-        id="name"
+        id="username"
         onChange={handleInputChange}
         value={userDetails.name}
         className="border p-1"

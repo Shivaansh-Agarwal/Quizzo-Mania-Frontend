@@ -14,8 +14,8 @@ export function showSuccessToastMessage(toastMessage) {
   toast.success(toastMessage, { ...toastParams });
 }
 
-export function showErrorToastMessage(customErrMsg, errorCode, errorMessage) {
-  toast.error(`${customErrMsg} ${errorCode} ${errorMessage}`, {
+export function showErrorToastMessage(errorMessage) {
+  toast.error(`${errorMessage}`, {
     ...toastParams,
   });
 }
