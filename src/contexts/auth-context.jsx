@@ -13,8 +13,15 @@ function isUserLoggedIn() {
   return JSON.parse(localStorage.getItem("user"));
 }
 
+function getAuthorizationToken() {
+  return localStorage.getItem("authorizationToken");
+}
+
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(isUserLoggedIn);
+  const [authorizationToken, setAuthorizationToken] = useState(
+    getAuthorizationToken
+  );
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
 
   const navigate = useNavigate();
@@ -65,6 +72,7 @@ export function AuthProvider({ children }) {
         isDarkModeSelected,
       };
       setCurrentUser(userDetails);
+      setAuthorizationToken(authorizationToken);
       localStorage.setItem("user", JSON.stringify(userDetails));
       localStorage.setItem("authorizationToken", authorizationToken);
       clearLoginFields();
@@ -81,6 +89,7 @@ export function AuthProvider({ children }) {
   async function logout() {
     try {
       setCurrentUser(null);
+      setAuthorizationToken(null);
       localStorage.setItem("authorizationToken", null);
       localStorage.setItem("user", null);
     } catch (error) {
@@ -89,7 +98,9 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ signup, login, logout, currentUser }}>
+    <AuthContext.Provider
+      value={{ signup, login, logout, currentUser, authorizationToken }}
+    >
       <LoadingScreen showLoadingScreen={showLoadingScreen} />
       {children}
     </AuthContext.Provider>
