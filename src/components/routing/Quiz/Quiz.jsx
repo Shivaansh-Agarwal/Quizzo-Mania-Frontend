@@ -5,6 +5,7 @@ import axios from "axios";
 import { QuizInstructions } from "./QuizInstructions.jsx";
 import { QuizQuestionCard } from "./QuizQuestionCard.jsx";
 import { QuizResultCard } from "./QuizResultCard.jsx";
+import { LoadingScreen } from "@components/common";
 
 export function Quiz() {
   const [screen, setScreen] = useState({
@@ -12,6 +13,7 @@ export function Quiz() {
     isInstructionsScreen: true,
     isResultScreen: false,
   });
+  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
   const [quizDetails, setQuizDetails] = useState({});
   const [score, setScore] = useState(0);
   const { authorizationToken } = useAuth();
@@ -23,25 +25,31 @@ export function Quiz() {
       quizId,
       authorizationToken,
       setQuizDetails,
+      setShowLoadingScreen,
     });
   }, [quizId, authorizationToken]);
-  let correctAnsPoints = null;
-  let wrongAnsPoints = null;
-  let questions = null;
+  let correctAnsPoints = quizDetails?.correctAnsPoints;
+  let wrongAnsPoints = quizDetails.wrongAnsPoints;
+  let questions = quizDetails.questions;
   let questionsCount = null;
   let currQuestion = null;
   let currQuesOptions = null;
+  questionsCount = questions?.length;
   if (isQuestionsScreen && Object.keys(quizDetails).length !== 0) {
-    correctAnsPoints = quizDetails.correctAnsPoints;
-    wrongAnsPoints = quizDetails.wrongAnsPoints;
-    questions = quizDetails.questions;
-    questionsCount = questions.length;
     currQuestion = questions[questionNumber - 1].question;
     currQuesOptions = questions[questionNumber - 1].options;
   }
   return (
     <div className="flex flex-col justify-center items-center h-fit mx-4 mt-16 mb-4 sm:m-0 w-[18rem] sm:w-[36rem] max-w-xl overflow-auto">
-      {isInstructionsScreen && <QuizInstructions setScreen={setScreen} />}
+      <LoadingScreen showLoadingScreen={showLoadingScreen} />
+      {isInstructionsScreen && (
+        <QuizInstructions
+          correctAnsPoints={correctAnsPoints}
+          wrongAnsPoints={wrongAnsPoints}
+          questionsCount={questionsCount}
+          setScreen={setScreen}
+        />
+      )}
       {isQuestionsScreen && (
         <QuizQuestionCard
           question={currQuestion}
@@ -64,8 +72,10 @@ async function getQuestionsForCurrentQuiz({
   quizId,
   authorizationToken,
   setQuizDetails,
+  setShowLoadingScreen,
 }) {
   try {
+    setShowLoadingScreen(true);
     const config = {
       headers: {
         Authorization: `Bearer ${authorizationToken}`,
@@ -79,5 +89,7 @@ async function getQuestionsForCurrentQuiz({
   } catch (e) {
     console.error("Failed to fetch Questions for the current quiz");
     console.error(e.response);
+  } finally {
+    setShowLoadingScreen(false);
   }
 }

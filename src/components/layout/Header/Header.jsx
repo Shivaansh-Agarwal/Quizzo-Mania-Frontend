@@ -1,13 +1,20 @@
 import { useAuth } from "@contexts/auth-context.jsx";
+import { useNavigate } from "react-router-dom";
 
 export const Header = ({ minHeight, maxHeight }) => {
   const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
   return (
     <header
       className="pl-4 pr-4 flex flex-row justify-between items-center w-full bg-gray-200"
       style={{ minHeight, maxHeight }}
     >
-      <div className="font-permanentmarker text-2xl w-36 md:text-4xl md:w-fit">
+      <div
+        className="font-permanentmarker text-2xl w-36 md:text-4xl md:w-fit cursor-pointer"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
         Quizzo Mania
       </div>
       {currentUser && (
