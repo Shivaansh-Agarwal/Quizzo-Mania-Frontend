@@ -1,81 +1,83 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useAuth } from "@contexts/auth-context.jsx";
+import axios from "axios";
 import { QuizInstructions } from "./QuizInstructions.jsx";
 import { QuizQuestionCard } from "./QuizQuestionCard.jsx";
 import { QuizResultCard } from "./QuizResultCard.jsx";
-import { quizQuestions } from "../../../data/Questions.js";
 
 export function Quiz() {
-  const navigate = useNavigate();
   const [screen, setScreen] = useState({
     questionNumber: 0,
     isInstructionsScreen: true,
     isResultScreen: false,
   });
+  const [quizDetails, setQuizDetails] = useState({});
+  const [score, setScore] = useState(0);
+  const { authorizationToken } = useAuth();
   const { quizId } = useParams();
   const { questionNumber, isInstructionsScreen, isResultScreen } = screen;
-  const currQuizQuestionsObj =
-    !isInstructionsScreen && !isResultScreen
-      ? quizQuestions.find((quiz) => quiz.id === parseInt(quizId))
-      : null;
-  const currQuestionObj =
-    currQuizQuestionsObj && currQuizQuestionsObj.questions
-      ? currQuizQuestionsObj.questions.find(
-          (ques) => ques.id === questionNumber
-        )
-      : null;
-  let question, options;
-  if (currQuestionObj) {
-    question = currQuestionObj.question;
-    options = currQuestionObj.options;
+  const isQuestionsScreen = !isInstructionsScreen && !isResultScreen;
+  useEffect(() => {
+    getQuestionsForCurrentQuiz({
+      quizId,
+      authorizationToken,
+      setQuizDetails,
+    });
+  }, [quizId, authorizationToken]);
+  let correctAnsPoints = null;
+  let wrongAnsPoints = null;
+  let questions = null;
+  let questionsCount = null;
+  let currQuestion = null;
+  let currQuesOptions = null;
+  if (isQuestionsScreen && Object.keys(quizDetails).length !== 0) {
+    correctAnsPoints = quizDetails.correctAnsPoints;
+    wrongAnsPoints = quizDetails.wrongAnsPoints;
+    questions = quizDetails.questions;
+    questionsCount = questions.length;
+    currQuestion = questions[questionNumber - 1].question;
+    currQuesOptions = questions[questionNumber - 1].options;
   }
-  const questionsCount = currQuizQuestionsObj?.questions?.length;
   return (
     <div className="flex flex-col justify-center items-center h-fit mx-4 mt-16 mb-4 sm:m-0 w-[18rem] sm:w-[36rem] max-w-xl overflow-auto">
-      {isInstructionsScreen && <QuizInstructions />}
-      {!isInstructionsScreen && !isResultScreen && (
+      {isInstructionsScreen && <QuizInstructions setScreen={setScreen} />}
+      {isQuestionsScreen && (
         <QuizQuestionCard
-          question={question}
-          options={options}
+          question={currQuestion}
+          options={currQuesOptions}
           questionsCount={questionsCount}
           questionNumber={questionNumber}
+          correctPoints={correctAnsPoints}
+          inCorrectPoints={wrongAnsPoints}
+          setScreen={setScreen}
+          score={score}
+          setScore={setScore}
         />
       )}
       {isResultScreen && <QuizResultCard />}
-      <section className="mt-4">
-        {!isResultScreen && (
-          <button
-            className="bg-red-500 text-white pt-2 pb-2 pl-6 pr-6"
-            onClick={() => {
-              if (questionsCount === questionNumber) {
-                setScreen((screen) => {
-                  return { ...screen, isResultScreen: true };
-                });
-              } else {
-                setScreen((screen) => {
-                  return {
-                    ...screen,
-                    isInstructionsScreen: false,
-                    questionNumber: screen.questionNumber + 1,
-                  };
-                });
-              }
-            }}
-          >
-            {questionsCount === questionNumber ? "Finish" : "NEXT"}
-          </button>
-        )}
-        {isResultScreen && (
-          <button
-            className="bg-red-500 text-white pt-2 pb-2 pl-6 pr-6"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            Go to Dashboard
-          </button>
-        )}
-      </section>
     </div>
   );
+}
+
+async function getQuestionsForCurrentQuiz({
+  quizId,
+  authorizationToken,
+  setQuizDetails,
+}) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${authorizationToken}`,
+      },
+    };
+    const response = await axios.get(
+      `https://QuizAppBackend.shivaansh98.repl.co/api/v1/questions/${quizId}`,
+      config
+    );
+    setQuizDetails(response.data.data);
+  } catch (e) {
+    console.error("Failed to fetch Questions for the current quiz");
+    console.error(e.response);
+  }
 }

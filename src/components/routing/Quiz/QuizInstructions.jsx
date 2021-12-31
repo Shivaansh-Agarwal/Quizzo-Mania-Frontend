@@ -5,6 +5,7 @@ export const QuizInstructions = ({
   correctAnsPoints = 5,
   wrongAnsPoints = -4,
   prevBestScore = null,
+  setScreen,
 }) => {
   const instructions = [
     { item: "Quiz Category: ", value: quizCategory },
@@ -50,6 +51,20 @@ export const QuizInstructions = ({
           )}
         </ul>
       </section>
+      <button
+        className="bg-red-500 text-white pt-2 pb-2 pl-6 pr-6"
+        onClick={() => {
+          setScreen((screen) => {
+            return {
+              ...screen,
+              isInstructionsScreen: false,
+              questionNumber: screen.questionNumber + 1,
+            };
+          });
+        }}
+      >
+        NEXT
+      </button>
     </div>
   );
 };
