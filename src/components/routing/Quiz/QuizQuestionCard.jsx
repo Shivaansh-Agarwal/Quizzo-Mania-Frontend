@@ -89,8 +89,9 @@ const Choice = ({
   }
   let bgColor = getChoiceBgColor(userAnswer);
   return (
-    <div
-      className={`border cursor-pointer my-2 p-2 flex text-sm sm:text-base ${bgColor}`}
+    <button
+      className={`border cursor-pointer w-full my-2 p-2 flex text-sm sm:text-base ${bgColor}`}
+      disabled={userAnswer}
       onClick={() => {
         if (isCorrect) {
           setScore((score) => score + correctPoints);
@@ -102,6 +103,6 @@ const Choice = ({
     >
       <div className="mr-2 font-semibold text-cyan-900">{optionKey}.</div>
       <div>{choice}</div>
-    </div>
+    </button>
   );
 };
