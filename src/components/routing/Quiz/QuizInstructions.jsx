@@ -1,9 +1,9 @@
 export const QuizInstructions = ({
   quizName = "Quiz Name",
   quizCategory = "Sports",
-  questionsCount = 10,
-  correctAnsPoints = 5,
-  wrongAnsPoints = -4,
+  questionsCount = 0,
+  correctAnsPoints = 0,
+  wrongAnsPoints = 0,
   prevBestScore = null,
   setScreen,
 }) => {
