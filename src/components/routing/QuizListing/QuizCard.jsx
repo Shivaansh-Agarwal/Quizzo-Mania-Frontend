@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export function QuizCard({
-  id,
+  _id,
   name,
   category,
   isAttempted,
@@ -11,7 +11,7 @@ export function QuizCard({
 }) {
   const navigate = useNavigate();
   function navigateToQuizPage() {
-    navigate(`quiz/${id}`);
+    navigate(`quiz/${_id}`);
   }
   return (
     <div className="flex flex-col justify-center items-center rounded-lg drop-shadow-md p-3 bg-white">
