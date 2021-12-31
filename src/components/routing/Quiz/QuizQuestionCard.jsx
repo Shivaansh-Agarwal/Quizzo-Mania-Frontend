@@ -11,6 +11,28 @@ export const QuizQuestionCard = ({
   setScore,
   setScreen,
 }) => {
+  const [userAnswer, setUserAnswer] = useState(null);
+
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      if (userAnswer) {
+        setScreen((screen) => {
+          if (questionsCount === questionNumber) {
+            return {
+              ...screen,
+              isResultScreen: true,
+              questionNumber: screen.questionNumber + 1,
+            };
+          }
+          return { ...screen, questionNumber: screen.questionNumber + 1 };
+        });
+        setUserAnswer(null);
+      }
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [userAnswer]);
   return (
     <div className="mt-2 p-4 sm:mt-4 sm:p-8 border flex flex-col justify-center w-full">
       <div className="flex flex-row justify-between text-sm sm:text-base">
@@ -24,11 +46,14 @@ export const QuizQuestionCard = ({
         {question}
       </div>
       <div className="mt-4">
-        {options.map(({ choice, isCorrect }, index) => {
+        {options.map(({ _id, choice, isCorrect }, index) => {
           const optionKey = String.fromCharCode(97 + index);
           return (
             <Choice
-              key={index}
+              key={_id}
+              _id={_id}
+              userAnswer={userAnswer}
+              setUserAnswer={setUserAnswer}
               optionKey={optionKey}
               choice={choice}
               questionNumber={questionNumber}
@@ -49,6 +74,9 @@ export const QuizQuestionCard = ({
 const Choice = ({
   optionKey,
   choice,
+  _id,
+  userAnswer,
+  setUserAnswer,
   isCorrect,
   correctPoints,
   inCorrectPoints,
@@ -57,42 +85,25 @@ const Choice = ({
   questionNumber,
   questionsCount,
 }) => {
-  /**
-   * onClick of a choice, highlight whether that answer is right or wrong.
-   * and highlight the correct answer also.
-   *
-   * Disable click for all options.
-   */
-  let timer = null;
-  function proceed() {
-    timer = setTimeout(() => {
-      setScreen((screen) => {
-        if (questionsCount === questionNumber) {
-          return {
-            ...screen,
-            isResultScreen: true,
-            questionNumber: screen.questionNumber + 1,
-          };
-        }
-        return { ...screen, questionNumber: screen.questionNumber + 1 };
-      });
-    }, 1000);
+  function getChoiceBgColor(userAnswer) {
+    if (userAnswer && isCorrect) {
+      return "bg-green-100";
+    } else if (userAnswer && userAnswer === _id && !isCorrect) {
+      return "bg-red-100";
+    }
+    return "bg-slate-100";
   }
-  useEffect(() => {
-    return clearTimeout(timer);
-  });
+  let bgColor = getChoiceBgColor(userAnswer);
   return (
     <div
-      className={
-        "border cursor-pointer my-2 p-2 flex text-sm sm:text-base bg-slate-100"
-      }
+      className={`border cursor-pointer my-2 p-2 flex text-sm sm:text-base ${bgColor}`}
       onClick={() => {
         if (isCorrect) {
           setScore((score) => score + correctPoints);
         } else {
           setScore((score) => score + inCorrectPoints);
         }
-        proceed();
+        setUserAnswer(_id);
       }}
     >
       <div className="mr-2 font-semibold text-cyan-900">{optionKey}.</div>
