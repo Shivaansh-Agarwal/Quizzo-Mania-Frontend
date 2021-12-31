@@ -56,13 +56,10 @@ export const QuizQuestionCard = ({
               setUserAnswer={setUserAnswer}
               optionKey={optionKey}
               choice={choice}
-              questionNumber={questionNumber}
-              questionsCount={questionsCount}
               isCorrect={isCorrect}
               correctPoints={correctPoints}
               inCorrectPoints={inCorrectPoints}
               setScore={setScore}
-              setScreen={setScreen}
             />
           );
         })}
@@ -81,9 +78,6 @@ const Choice = ({
   correctPoints,
   inCorrectPoints,
   setScore,
-  setScreen,
-  questionNumber,
-  questionsCount,
 }) => {
   function getChoiceBgColor(userAnswer) {
     if (userAnswer && isCorrect) {
