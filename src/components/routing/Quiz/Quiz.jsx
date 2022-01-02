@@ -63,7 +63,7 @@ export function Quiz() {
           setScore={setScore}
         />
       )}
-      {isResultScreen && <QuizResultCard score={score} />}
+      {isResultScreen && <QuizResultCard score={score} quizId={quizId} />}
     </div>
   );
 }

@@ -14,7 +14,11 @@ export function QuizCard({
     navigate(`quiz/${_id}`);
   }
   return (
-    <div className="flex flex-col justify-center items-center rounded-lg drop-shadow-md p-3 bg-white">
+    <div
+      className={`flex flex-col justify-center items-center rounded-lg drop-shadow-md p-3 ${
+        isAttempted ? "bg-slate-600" : "bg-white"
+      }`}
+    >
       <section>
         <img src={thumbnail} alt="QuizThubnail" />
       </section>
