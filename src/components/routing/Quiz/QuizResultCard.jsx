@@ -1,16 +1,14 @@
-import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@contexts/auth-context.jsx";
-import { LoadingScreen } from "@components/common";
+import { useLoadingScreen } from "./loadingScreen-context";
 
 export const QuizResultCard = ({ score, quizId }) => {
-  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  const { setShowLoadingScreen } = useLoadingScreen();
   const { currentUser, authorizationToken, logout, setCurrentUser } = useAuth();
   const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center">
-      <LoadingScreen showLoadingScreen={showLoadingScreen} />
       <div className="text-4xl mb-6">Results</div>
       <div className="mb-16">
         Final Score: <span className="text-2xl">{score}</span>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -6,7 +6,7 @@ import {
   showErrorToastMessage,
 } from "@utils/utility.js";
 import userReducer from "../reducers/user.reducer";
-import { LoadingScreen } from "@components/common";
+import { useLoadingScreen } from "./loadingScreen-context";
 
 const AuthContext = createContext(null);
 
@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
     initialUserDetails,
     getUserDetails
   );
-  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  const { setShowLoadingScreen } = useLoadingScreen();
 
   const navigate = useNavigate();
 
@@ -99,7 +99,6 @@ export function AuthProvider({ children }) {
         authorizationToken: authState.authorizationToken,
       }}
     >
-      <LoadingScreen showLoadingScreen={showLoadingScreen} />
       {children}
     </AuthContext.Provider>
   );

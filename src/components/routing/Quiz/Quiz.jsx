@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@contexts/auth-context.jsx";
+import { useLoadingScreen } from "./loadingScreen-context";
 import axios from "axios";
 import { QuizInstructions } from "./QuizInstructions.jsx";
 import { QuizQuestionCard } from "./QuizQuestionCard.jsx";
 import { QuizResultCard } from "./QuizResultCard.jsx";
-import { LoadingScreen } from "@components/common";
 
 export function Quiz() {
   const [screen, setScreen] = useState({
@@ -13,7 +13,7 @@ export function Quiz() {
     isInstructionsScreen: true,
     isResultScreen: false,
   });
-  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  const { setShowLoadingScreen } = useLoadingScreen();
   const [quizDetails, setQuizDetails] = useState({});
   const [score, setScore] = useState(0);
   const { authorizationToken } = useAuth();
@@ -41,7 +41,6 @@ export function Quiz() {
   }
   return (
     <div className="flex flex-col justify-center items-center h-fit mx-4 mt-16 mb-4 sm:m-0 w-[18rem] sm:w-[36rem] max-w-xl overflow-auto">
-      <LoadingScreen showLoadingScreen={showLoadingScreen} />
       {isInstructionsScreen && (
         <QuizInstructions
           correctAnsPoints={correctAnsPoints}

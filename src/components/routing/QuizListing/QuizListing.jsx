@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "@contexts/auth-context.jsx";
+import { useLoadingScreen } from "./loadingScreen-context";
 import { QuizCard } from "./QuizCard";
-import { LoadingScreen } from "@components/common";
 import { showErrorToastMessage } from "@utils/utility.js";
 
 export function QuizListing() {
   const [quizList, setQuizList] = useState([]);
-  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  const { setShowLoadingScreen } = useLoadingScreen();
   const { currentUser, authorizationToken, logout } = useAuth();
   useEffect(() => {
     getQuizList({
@@ -20,7 +20,6 @@ export function QuizListing() {
   const quizAttemptedList = currentUser.quizAttempted; // To be used later in QuizCard component to display some overlay.
   return (
     <div className="flex flex-row flex-wrap justify-center items-center gap-4 overflow-auto h-full p-4 bg-slate-100">
-      <LoadingScreen showLoadingScreen={showLoadingScreen} />
       {quizList.length === 0
         ? "No Quiz is available at the moment!"
         : quizList.map((quiz) => {
