@@ -1,12 +1,12 @@
 import { createContext, useContext, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import {
   showSuccessToastMessage,
   showErrorToastMessage,
 } from "@utils/utility.js";
 import userReducer from "../reducers/user.reducer";
 import { useLoadingScreen } from "@contexts/loadingScreen-context";
+import { signupAPI, loginAPI } from "../api/api-requests.js";
 
 const AuthContext = createContext(null);
 
@@ -32,50 +32,36 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
   async function signup({ email, password, username, clearSignUpFields }) {
-    try {
-      setShowLoadingScreen(true);
-      const response = await axios.post(
-        "https://quizappbackend.shivaansh98.repl.co/signup",
-        {
-          username,
-          email,
-          password,
-        }
-      );
+    setShowLoadingScreen(true);
+    const response = await signupAPI({ username, email, password });
+    if (response.status === "success") {
       console.log("Signup Successful!!");
       clearSignUpFields();
-      showSuccessToastMessage(response.data.message);
+      showSuccessToastMessage(response.message);
       navigate("/login");
-    } catch (e) {
-      console.error("Signup Failed", e.response.data);
-      const { message: errMsg } = e.response.data;
-      showErrorToastMessage(errMsg);
-    } finally {
-      setShowLoadingScreen(false);
+    } else {
+      console.error("Signup Failed", response.message);
+      showErrorToastMessage(response.message);
     }
+    setShowLoadingScreen(false);
   }
 
   async function login({ email, password, clearLoginFields }) {
-    try {
-      setShowLoadingScreen(true);
-      const response = await axios.post(
-        "https://quizappbackend.shivaansh98.repl.co/login",
-        { email, password }
-      );
+    setShowLoadingScreen(true);
+    const response = await loginAPI({ email, password });
+    if (response.status === "success") {
       console.log("Login Successful!");
       authDispatch({
         type: "LOGIN",
-        payload: response.data.data,
+        payload: response.data,
       });
       clearLoginFields();
       navigate("/");
-    } catch (e) {
-      console.error("Signup Failed", e.response.data);
-      const { message: errMsg } = e.response.data;
-      showErrorToastMessage(errMsg);
-    } finally {
-      setShowLoadingScreen(false);
+    } else {
+      console.error("Signup Failed", response.message);
+      showErrorToastMessage(response.message);
     }
+    setShowLoadingScreen(false);
   }
 
   async function logout() {
