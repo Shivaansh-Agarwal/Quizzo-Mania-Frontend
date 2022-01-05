@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
     currUserDetails: null,
     authorizationToken: null,
   };
-  const [authState, authDispatch] = useReducer(
+  const [authUserState, authUserDispatch] = useReducer(
     userReducer,
     initialUserDetails,
     getUserDetails
@@ -51,7 +51,7 @@ export function AuthProvider({ children }) {
     const response = await loginAPI({ email, password });
     if (response.status === "success") {
       console.log("Login Successful!");
-      authDispatch({
+      authUserDispatch({
         type: "LOGIN",
         payload: response.data,
       });
@@ -66,7 +66,7 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     try {
-      authDispatch({
+      authUserDispatch({
         type: "LOGOUT",
         payload: {},
       });
@@ -81,8 +81,9 @@ export function AuthProvider({ children }) {
         signup,
         login,
         logout,
-        currentUser: authState.currUserDetails,
-        authorizationToken: authState.authorizationToken,
+        currentUser: authUserState.currUserDetails,
+        authorizationToken: authUserState.authorizationToken,
+        authUserDispatch,
       }}
     >
       {children}
