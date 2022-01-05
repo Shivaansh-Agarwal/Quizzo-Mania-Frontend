@@ -1,11 +1,12 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@contexts/auth-context.jsx";
 import { useLoadingScreen } from "@contexts/loadingScreen-context";
+import { updateUserDetailsAPI } from "../../../api/api-requests.js";
 
 export const QuizResultCard = ({ score, quizId }) => {
   const { setShowLoadingScreen } = useLoadingScreen();
-  const { currentUser, authorizationToken, logout, setCurrentUser } = useAuth();
+  const { currentUser, authorizationToken, logout, authUserDispatch } =
+    useAuth();
   const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center">
@@ -23,7 +24,7 @@ export const QuizResultCard = ({ score, quizId }) => {
             logout,
             quizId,
             setShowLoadingScreen,
-            setCurrentUser,
+            authUserDispatch,
           });
           navigate("/");
         }}
@@ -40,30 +41,28 @@ async function updateUserDetails({
   logout,
   quizId,
   setShowLoadingScreen,
-  setCurrentUser,
+  authUserDispatch,
 }) {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${authorizationToken}`,
-    },
-  };
-  try {
-    setShowLoadingScreen(true);
-    axios.post();
-    const response = await axios.post(
-      "https://QuizAppBackend.shivaansh98.repl.co/api/v1/user",
-      { email: currentUser.email, completedQuizId: quizId },
-      config
-    );
-    const { quizAttempted } = response.data.data;
-    setCurrentUser((userDetails) => {
-      return { ...userDetails, quizAttempted: quizAttempted };
+  setShowLoadingScreen(true);
+  const response = await updateUserDetailsAPI({
+    email: currentUser.email,
+    authorizationToken,
+    quizId,
+  });
+  if (response.status === "success") {
+    authUserDispatch({
+      type: "UPDATE_USER_DETAILS",
+      payload: response.data,
     });
-    const userDetails = JSON.parse(localStorage.getItem("user"));
-    const updatedUserDetails = { ...userDetails, quizAttempted: quizAttempted };
-    localStorage.setItem("user", JSON.stringify(updatedUserDetails));
-    setShowLoadingScreen(false);
-  } catch (e) {
-    console.error(e.response);
+  } else {
+    if (response.statusCode === 204) {
+      console.log("No Update Required, user has already attempted this quiz");
+    } else {
+      console.error("Update user details failed", response.message);
+      if (response.statusCode === 401) {
+        logout();
+      }
+    }
   }
+  setShowLoadingScreen(false);
 }

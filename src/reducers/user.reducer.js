@@ -1,6 +1,6 @@
 export default function userReducer(prevState, action) {
   switch (action.type) {
-    case "LOGIN":
+    case "LOGIN": {
       const { authorizationToken } = action.payload;
       const currUserDetails = {
         email: action.payload.email,
@@ -15,7 +15,8 @@ export default function userReducer(prevState, action) {
         currUserDetails: currUserDetails,
         authorizationToken,
       };
-    case "LOGOUT":
+    }
+    case "LOGOUT": {
       localStorage.setItem("authorizationToken", null);
       localStorage.setItem("user", null);
       return {
@@ -23,6 +24,22 @@ export default function userReducer(prevState, action) {
         currUserDetails: null,
         authorizationToken: null,
       };
+    }
+    case "UPDATE_USER_DETAILS": {
+      const { quizAttempted } = action.payload;
+      const updatedCurrUserDetails = {
+        ...prevState.currUserDetails,
+        quizAttempted: quizAttempted,
+      };
+      localStorage.setItem("user", JSON.stringify(updatedCurrUserDetails));
+      return {
+        ...prevState,
+        currUserDetails: {
+          ...prevState.currUserDetails,
+          quizAttempted: quizAttempted,
+        },
+      };
+    }
     default:
       break;
   }

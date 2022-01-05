@@ -88,3 +88,34 @@ export async function getQuestionsForCurrentQuizAPI({
     return finalResponse;
   }
 }
+
+export async function updateUserDetailsAPI({
+  email,
+  quizId,
+  authorizationToken,
+}) {
+  let finalResponse = {};
+  const config = {
+    headers: {
+      Authorization: `Bearer ${authorizationToken}`,
+    },
+  };
+  try {
+    const response = await axios.post(
+      "https://QuizAppBackend.shivaansh98.repl.co/api/v1/user",
+      { email: email, completedQuizId: quizId },
+      config
+    );
+    finalResponse = {
+      ...response.data,
+      statusCode: response.status,
+    };
+  } catch (e) {
+    finalResponse = {
+      ...e.response.data,
+      statusCode: e.response.status,
+    };
+  } finally {
+    return finalResponse;
+  }
+}
