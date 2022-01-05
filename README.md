@@ -40,7 +40,9 @@ A quiz app to help you prepare and revise your Javascript and Frontend related c
 - Quiz Screen
   _ Instructions Screen
   _ Quiz Question Screen \* Result Screen
-  **FUNCTIONALITY**
+
+**FUNCTIONALITY**
+
 - User needs to Signup & Login to view the Quiz Listing Page.
   - Guest Login credentails can be used in case, someone doesn't wan't to Signup.
 - After Login user can see all the available quiz.
