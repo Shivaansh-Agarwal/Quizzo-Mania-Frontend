@@ -1,6 +1,8 @@
 # Quizzo Mania Webapp
 
-A quiz app to help you prepare and revise your Javascript and Frontend related concepts.
+A fully _Responsive_ quiz app to help you prepare and revise your Javascript and Frontend related concepts.
+
+Backend Repo: https://github.com/Shivaansh-Agarwal/Quizzo-Mania-Backend
 
 ## Installation
 
