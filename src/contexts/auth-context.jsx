@@ -1,26 +1,31 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   showSuccessToastMessage,
   showErrorToastMessage,
 } from "@utils/utility.js";
+import userReducer from "../reducers/user.reducer";
 import { LoadingScreen } from "@components/common";
 
 const AuthContext = createContext(null);
 
-function isUserLoggedIn() {
-  return JSON.parse(localStorage.getItem("user"));
-}
-
-function getAuthorizationToken() {
-  return localStorage.getItem("authorizationToken");
+function getUserDetails() {
+  return {
+    currUserDetails: JSON.parse(localStorage.getItem("user")),
+    authorizationToken: localStorage.getItem("authorizationToken"),
+  };
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(isUserLoggedIn);
-  const [authorizationToken, setAuthorizationToken] = useState(
-    getAuthorizationToken
+  const initialUserDetails = {
+    currUserDetails: null,
+    authorizationToken: null,
+  };
+  const [authState, authDispatch] = useReducer(
+    userReducer,
+    initialUserDetails,
+    getUserDetails
   );
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
 
@@ -58,23 +63,10 @@ export function AuthProvider({ children }) {
         { email, password }
       );
       console.log("Login Successful!");
-      const {
-        email: userEmail,
-        username,
-        quizAttempted,
-        isDarkModeSelected,
-        authorizationToken,
-      } = response.data.data;
-      const userDetails = {
-        email: userEmail,
-        username,
-        quizAttempted,
-        isDarkModeSelected,
-      };
-      setCurrentUser(userDetails);
-      setAuthorizationToken(authorizationToken);
-      localStorage.setItem("user", JSON.stringify(userDetails));
-      localStorage.setItem("authorizationToken", authorizationToken);
+      authDispatch({
+        type: "LOGIN",
+        payload: response.data.data,
+      });
       clearLoginFields();
       navigate("/");
     } catch (e) {
@@ -88,10 +80,10 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     try {
-      setCurrentUser(null);
-      setAuthorizationToken(null);
-      localStorage.setItem("authorizationToken", null);
-      localStorage.setItem("user", null);
+      authDispatch({
+        type: "LOGOUT",
+        payload: {},
+      });
     } catch (error) {
       showErrorToastMessage("Logout Failed");
     }
@@ -99,7 +91,13 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ signup, login, logout, currentUser, authorizationToken }}
+      value={{
+        signup,
+        login,
+        logout,
+        currentUser: authState.currUserDetails,
+        authorizationToken: authState.authorizationToken,
+      }}
     >
       <LoadingScreen showLoadingScreen={showLoadingScreen} />
       {children}
