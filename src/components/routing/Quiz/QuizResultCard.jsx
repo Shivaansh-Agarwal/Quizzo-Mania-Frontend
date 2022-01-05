@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@contexts/auth-context.jsx";
-import { useLoadingScreen } from "./loadingScreen-context";
+import { useLoadingScreen } from "@contexts/loadingScreen-context";
 
 export const QuizResultCard = ({ score, quizId }) => {
   const { setShowLoadingScreen } = useLoadingScreen();

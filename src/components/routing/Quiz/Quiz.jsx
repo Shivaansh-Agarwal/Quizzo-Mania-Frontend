@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@contexts/auth-context.jsx";
-import { useLoadingScreen } from "./loadingScreen-context";
+import { useLoadingScreen } from "@contexts/loadingScreen-context";
 import axios from "axios";
 import { QuizInstructions } from "./QuizInstructions.jsx";
 import { QuizQuestionCard } from "./QuizQuestionCard.jsx";

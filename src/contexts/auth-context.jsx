@@ -6,7 +6,7 @@ import {
   showErrorToastMessage,
 } from "@utils/utility.js";
 import userReducer from "../reducers/user.reducer";
-import { useLoadingScreen } from "./loadingScreen-context";
+import { useLoadingScreen } from "@contexts/loadingScreen-context";
 
 const AuthContext = createContext(null);
 

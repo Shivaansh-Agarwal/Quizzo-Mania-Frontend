@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "@contexts/auth-context.jsx";
-import { useLoadingScreen } from "./loadingScreen-context";
+import { useLoadingScreen } from "@contexts/loadingScreen-context";
 import { QuizCard } from "./QuizCard";
 import { showErrorToastMessage } from "@utils/utility.js";
 
