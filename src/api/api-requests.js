@@ -33,3 +33,29 @@ export async function loginAPI({ email, password }) {
     return finalResponse;
   }
 }
+
+export async function getQuizListAPI({ authorizationToken }) {
+  let finalResponse = {};
+  const config = {
+    headers: {
+      Authorization: `Bearer ${authorizationToken}`,
+    },
+  };
+  try {
+    const response = await axios.get(
+      "https://QuizAppBackend.shivaansh98.repl.co/api/v1/quizzes",
+      config
+    );
+    finalResponse = {
+      ...response.data,
+      statusCode: response.status,
+    };
+  } catch (e) {
+    finalResponse = {
+      ...e.response.data,
+      statusCode: e.response.status,
+    };
+  } finally {
+    return finalResponse;
+  }
+}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useAuth } from "@contexts/auth-context.jsx";
 import { useLoadingScreen } from "@contexts/loadingScreen-context";
 import { QuizCard } from "./QuizCard";
 import { showErrorToastMessage } from "@utils/utility.js";
+import { getQuizListAPI } from "../../../api/api-requests.js";
 
 export function QuizListing() {
   const [quizList, setQuizList] = useState([]);
@@ -17,7 +17,7 @@ export function QuizListing() {
       logout,
     });
   }, [authorizationToken]);
-  const quizAttemptedList = currentUser.quizAttempted; // To be used later in QuizCard component to display some overlay.
+  const quizAttemptedList = currentUser.quizAttempted;
   return (
     <div className="flex flex-row flex-wrap justify-center items-center gap-4 overflow-auto h-full p-4 bg-slate-100">
       {quizList.length === 0
@@ -25,6 +25,8 @@ export function QuizListing() {
         : quizList.map((quiz) => {
             if (quizAttemptedList.includes(quiz._id)) {
               quiz.isAttempted = true;
+            } else {
+              quiz.isAttempted = false;
             }
             return <QuizCard key={quiz._id} {...quiz} />;
           })}
@@ -38,25 +40,16 @@ async function getQuizList({
   setQuizList,
   logout,
 }) {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${authorizationToken}`,
-    },
-  };
-  try {
-    setShowLoadingScreen(true);
-    const response = await axios.get(
-      "https://QuizAppBackend.shivaansh98.repl.co/api/v1/quizzes",
-      config
-    );
-    setQuizList(response.data.data);
-  } catch (e) {
-    console.error(e.response);
-    showErrorToastMessage(e.response.data.message);
-    if (e.response.status === 401) {
+  setShowLoadingScreen(true);
+  const response = await getQuizListAPI({ authorizationToken });
+  if (response.status === "success") {
+    setQuizList(response.data);
+  } else {
+    console.error(response.message);
+    showErrorToastMessage(response.message);
+    if (response.statusCode === 401) {
       logout();
     }
-  } finally {
-    setShowLoadingScreen(false);
   }
+  setShowLoadingScreen(false);
 }
