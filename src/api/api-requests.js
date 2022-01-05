@@ -1,16 +1,14 @@
 import axios from "axios";
+import { BASE_URL } from "@utils/constants.js";
 
 export async function signupAPI({ username, email, password }) {
   let finalResponse = {};
   try {
-    const response = await axios.post(
-      "https://quizappbackend.shivaansh98.repl.co/signup",
-      {
-        username,
-        email,
-        password,
-      }
-    );
+    const response = await axios.post(`${BASE_URL}/signup`, {
+      username,
+      email,
+      password,
+    });
     finalResponse = response.data;
   } catch (e) {
     finalResponse = e.response.data;
@@ -22,10 +20,7 @@ export async function signupAPI({ username, email, password }) {
 export async function loginAPI({ email, password }) {
   let finalResponse = {};
   try {
-    const response = await axios.post(
-      "https://quizappbackend.shivaansh98.repl.co/login",
-      { email, password }
-    );
+    const response = await axios.post(`${BASE_URL}/login`, { email, password });
     finalResponse = response.data;
   } catch (e) {
     finalResponse = e.response.data;
@@ -42,10 +37,7 @@ export async function getQuizListAPI({ authorizationToken }) {
     },
   };
   try {
-    const response = await axios.get(
-      "https://QuizAppBackend.shivaansh98.repl.co/api/v1/quizzes",
-      config
-    );
+    const response = await axios.get(`${BASE_URL}/api/v1/quizzes`, config);
     finalResponse = {
       ...response.data,
       statusCode: response.status,
@@ -72,7 +64,7 @@ export async function getQuestionsForCurrentQuizAPI({
       },
     };
     const response = await axios.get(
-      `https://QuizAppBackend.shivaansh98.repl.co/api/v1/questions/${quizId}`,
+      `${BASE_URL}/api/v1/questions/${quizId}`,
       config
     );
     finalResponse = {
@@ -102,7 +94,7 @@ export async function updateUserDetailsAPI({
   };
   try {
     const response = await axios.post(
-      "https://QuizAppBackend.shivaansh98.repl.co/api/v1/user",
+      `${BASE_URL}/api/v1/user`,
       { email: email, completedQuizId: quizId },
       config
     );
