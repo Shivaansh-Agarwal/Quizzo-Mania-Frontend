@@ -15,14 +15,17 @@ export function QuizCard({
   }
   return (
     <div
-      className={`flex flex-col justify-center items-center rounded-lg drop-shadow-md p-3 ${
-        isAttempted ? "bg-slate-600" : "bg-white"
-      }`}
+      className={`flex flex-col justify-center items-center rounded-lg drop-shadow-md p-3 bg-white`}
     >
-      <section>
+      <section className="relative">
+        {isAttempted && (
+          <div className="absolute top-0 bottom-0 left-0 right-0 bg-gray-800 opacity-60 z-10 text-white flex justify-center items-center font-bold">
+            ATTEMPTED
+          </div>
+        )}
         <img src={thumbnail} alt="QuizThubnail" />
       </section>
-      <section className="flex flex-col justify-center items-center">
+      <section className="flex flex-col justify-center items-center z-20">
         <div>{name}</div>
         <div>
           <button
