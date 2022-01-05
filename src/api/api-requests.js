@@ -59,3 +59,32 @@ export async function getQuizListAPI({ authorizationToken }) {
     return finalResponse;
   }
 }
+
+export async function getQuestionsForCurrentQuizAPI({
+  quizId,
+  authorizationToken,
+}) {
+  let finalResponse = {};
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${authorizationToken}`,
+      },
+    };
+    const response = await axios.get(
+      `https://QuizAppBackend.shivaansh98.repl.co/api/v1/questions/${quizId}`,
+      config
+    );
+    finalResponse = {
+      ...response.data,
+      statusCode: response.status,
+    };
+  } catch (e) {
+    finalResponse = {
+      ...e.response.data,
+      statusCode: e.response.status,
+    };
+  } finally {
+    return finalResponse;
+  }
+}

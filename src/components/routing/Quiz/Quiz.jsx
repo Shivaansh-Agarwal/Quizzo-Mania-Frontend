@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@contexts/auth-context.jsx";
 import { useLoadingScreen } from "@contexts/loadingScreen-context";
-import axios from "axios";
+import { showErrorToastMessage } from "@utils/utility.js";
 import { QuizInstructions } from "./QuizInstructions.jsx";
 import { QuizQuestionCard } from "./QuizQuestionCard.jsx";
 import { QuizResultCard } from "./QuizResultCard.jsx";
+import { getQuestionsForCurrentQuizAPI } from "../../../api/api-requests.js";
 
 export function Quiz() {
   const [screen, setScreen] = useState({
@@ -73,22 +74,17 @@ async function getQuestionsForCurrentQuiz({
   setQuizDetails,
   setShowLoadingScreen,
 }) {
-  try {
-    setShowLoadingScreen(true);
-    const config = {
-      headers: {
-        Authorization: `Bearer ${authorizationToken}`,
-      },
-    };
-    const response = await axios.get(
-      `https://QuizAppBackend.shivaansh98.repl.co/api/v1/questions/${quizId}`,
-      config
-    );
-    setQuizDetails(response.data.data);
-  } catch (e) {
+  setShowLoadingScreen(true);
+  const response = await getQuestionsForCurrentQuizAPI({
+    quizId,
+    authorizationToken,
+  });
+  if (response.status === "success") {
+    setQuizDetails(response.data);
+  } else {
     console.error("Failed to fetch Questions for the current quiz");
-    console.error(e.response);
-  } finally {
-    setShowLoadingScreen(false);
+    console.error(response.message);
+    showErrorToastMessage(response.message);
   }
+  setShowLoadingScreen(false);
 }
