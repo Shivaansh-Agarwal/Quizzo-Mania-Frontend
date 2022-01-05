@@ -3,7 +3,7 @@ import { useAuth } from "@contexts/auth-context.jsx";
 import { useLoadingScreen } from "@contexts/loadingScreen-context";
 import { QuizCard } from "./QuizCard";
 import { showErrorToastMessage } from "@utils/utility.js";
-import { getQuizListAPI } from "../../../api/api-requests.js";
+import { getQuizListAPI } from "@apis";
 
 export function QuizListing() {
   const [quizList, setQuizList] = useState([]);

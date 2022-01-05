@@ -8,6 +8,7 @@ module.exports = {
       "@assets": path.resolve(__dirname, "src/assets"),
       "@contexts": path.resolve(__dirname, "src/contexts"),
       "@utils": path.resolve(__dirname, "src/utils"),
+      "@apis": path.resolve(__dirname, "src/api/api-requests.js"),
     },
   },
 };

@@ -6,7 +6,7 @@ import { showErrorToastMessage } from "@utils/utility.js";
 import { QuizInstructions } from "./QuizInstructions.jsx";
 import { QuizQuestionCard } from "./QuizQuestionCard.jsx";
 import { QuizResultCard } from "./QuizResultCard.jsx";
-import { getQuestionsForCurrentQuizAPI } from "../../../api/api-requests.js";
+import { getQuestionsForCurrentQuizAPI } from "@apis";
 
 export function Quiz() {
   const [screen, setScreen] = useState({

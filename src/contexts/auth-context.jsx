@@ -6,7 +6,7 @@ import {
 } from "@utils/utility.js";
 import userReducer from "../reducers/user.reducer";
 import { useLoadingScreen } from "@contexts/loadingScreen-context";
-import { signupAPI, loginAPI } from "../api/api-requests.js";
+import { signupAPI, loginAPI } from "@apis";
 
 const AuthContext = createContext(null);
 

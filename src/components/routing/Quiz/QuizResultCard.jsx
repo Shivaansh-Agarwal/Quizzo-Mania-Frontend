@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@contexts/auth-context.jsx";
 import { useLoadingScreen } from "@contexts/loadingScreen-context";
-import { updateUserDetailsAPI } from "../../../api/api-requests.js";
+import { updateUserDetailsAPI } from "@apis";
 
 export const QuizResultCard = ({ score, quizId }) => {
   const { setShowLoadingScreen } = useLoadingScreen();
